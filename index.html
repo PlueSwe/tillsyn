@@ -323,7 +323,7 @@ let DATA = [...SEEDED];
 let activeRegions=new Set(),activeTypes=new Set(),activeSkolform=new Set(),activeDrift=new Set(),activeMonths=new Set();
 let sortCol='datum',sortDir=-1;
 let rChart=null,dChart=null,mapReady=false;
-let activeYears=new Set([2026,2025]), yearDataLoaded={2026:true,2025:false,2024:false};
+let activeYears=new Set([2026,2025]), yearDataLoaded={2026:false,2025:false,2024:false};
 
 // ── Map ─────────────────────────────────────────────────────────────────────
 const W=176,H=400;
@@ -639,8 +639,8 @@ async function fetchDatesForRows(rows) {
   } catch(e) { /* silent fail */ }
 }
 
-// Load 2025 on startup since it's active by default, then render
-(async()=>{ await loadYearFromProxy(2025); applyFilters(); })();
+// Load 2026 + 2025 in parallel on startup
+(async()=>{ await Promise.all([loadYearFromProxy(2026), loadYearFromProxy(2025)]); applyFilters(); })();
 </script>
 <style>@keyframes spin{to{transform:rotate(360deg);}}</style>
 </body>
