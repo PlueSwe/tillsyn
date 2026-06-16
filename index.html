@@ -36,7 +36,8 @@ body{font-family:var(--fs);background:var(--bs);color:var(--tp);min-height:100vh
 input[type=text]{padding:7px 10px 7px 32px;border:1px solid var(--bb);border-radius:var(--rm);background:#fff;color:var(--tp);font-size:13px;outline:none;width:190px;font-family:var(--fs);}
 input[type=text]:focus{border-color:var(--brand);box-shadow:0 0 0 2px rgba(0,75,98,.15);}
 .btn-sm{font-size:12px;color:var(--ts);cursor:pointer;padding:6px 12px;border:1px solid var(--bb);background:#fff;border-radius:var(--rm);font-family:var(--fs);font-weight:600;}
-.btn-sm:hover{background:var(--bs);}
+.btn-sm:hover:not(:disabled){background:var(--bs);}
+.btn-sm:disabled{opacity:.4;cursor:default;}
 
 /* ── Page ── */
 .page{max-width:1100px;margin:0 auto;padding:1.2rem 1rem 2rem;}
@@ -322,6 +323,8 @@ const YEAR_COLS = {2026:'#004b62', 2025:'#fbba30', 2024:'#1D9E75'};
 let DATA = [...SEEDED];
 let activeRegions=new Set(),activeTypes=new Set(),activeSkolform=new Set(),activeDrift=new Set(),activeMonths=new Set();
 let sortCol='datum',sortDir=-1;
+let currentPage=1;
+const PAGE_SIZE=50;
 let rChart=null,dChart=null,mapReady=false;
 let activeYears=new Set([2026,2025]), yearDataLoaded={2026:false,2025:false,2024:false};
 
@@ -564,9 +567,7 @@ function renderTable(f){
     return av<bv?-sortDir:av>bv?sortDir:0;
   });
 
-  // Update table header columns
   const thEl=document.querySelector('.th');
-  const trTemplate='.tr';
   if(multiYear){
     thEl.style.gridTemplateColumns='1fr 60px 100px 130px 90px 65px';
     document.querySelectorAll('.th-cell-ar').forEach(e=>e.style.display='');
@@ -575,11 +576,17 @@ function renderTable(f){
     document.querySelectorAll('.th-cell-ar').forEach(e=>e.style.display='none');
   }
 
+  const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
+  if(currentPage > totalPages) currentPage = totalPages;
+  const start = (currentPage-1)*PAGE_SIZE;
+  const shown = sorted.slice(start, start+PAGE_SIZE);
+
   const body=document.getElementById('tableBody');
-  const shown=sorted.slice(0,100);
-  if(!shown.length){body.innerHTML='<div class="empty">Inga beslut matchar filtren</div>';return;}
+  if(!shown.length){body.innerHTML='<div class="empty">Inga beslut matchar filtren</div>';renderPager(0,0,0);return;}
+
+  const cols = multiYear ? '1fr 60px 100px 130px 90px 65px' : '1fr 100px 130px 90px 65px';
   body.innerHTML=shown.map(b=>`
-    <div class="tr" style="grid-template-columns:${multiYear?'1fr 60px 100px 130px 90px 65px':'1fr 100px 130px 90px 65px'}">
+    <div class="tr" style="grid-template-columns:${cols}">
       <span><div style="font-size:12px">${b.skola}</div><div class="mu">${b.kommun}</div></span>
       ${multiYear?`<span><span class="badge" style="background:${YEAR_COLS[b.ar]||'#555'};color:#fff;font-size:10px">${b.ar}</span></span>`:''}
       <span class="mu">${b.datum ? (b.datum_approx ? '~'+MONTHS_SV[parseInt(b.datum.split('-')[1])-1]+' '+b.ar : b.datum) : b.ar}</span>
@@ -590,11 +597,33 @@ function renderTable(f){
         <a href="${b.url}" class="badge bl" target="_blank" rel="noopener"><i class="ti ti-external-link" style="font-size:9px"></i> Beslut</a>
       </span>
     </div>`).join('');
-  if(f.length>100) body.innerHTML+=`<div class="empty" style="padding:.5rem;font-size:11px">Visar 100 av ${f.length}</div>`;
+
+  renderPager(currentPage, totalPages, sorted.length);
   scheduleDateFetch(shown);
 }
 
-function applyFilters(){
+function renderPager(page, total, count){
+  let el = document.getElementById('pager');
+  if(!el){ el=document.createElement('div'); el.id='pager'; document.querySelector('.table-card').appendChild(el); }
+  if(total<=1){el.innerHTML='';return;}
+  el.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-top:1px solid var(--bt);font-size:12px;color:var(--ts);background:#fff;';
+  el.innerHTML=`
+    <span>${(page-1)*PAGE_SIZE+1}–${Math.min(page*PAGE_SIZE,count)} av ${count} beslut</span>
+    <span style="display:flex;gap:6px">
+      <button class="btn-sm" ${page<=1?'disabled':''} onclick="gotoPage(${page-1})"><i class="ti ti-chevron-left"></i> Föregående</button>
+      <span style="padding:5px 8px;font-weight:700">${page} / ${total}</span>
+      <button class="btn-sm" ${page>=total?'disabled':''} onclick="gotoPage(${page+1})">Nästa <i class="ti ti-chevron-right"></i></button>
+    </span>`;
+}
+
+function gotoPage(p){
+  currentPage=p;
+  renderTable(getFiltered());
+  document.querySelector('.table-card').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function applyFilters(resetPage=true){
+  if(resetPage) currentPage=1;
   const activeData = getActiveData();
   renderTags(activeData);
   buildMonthFilter(activeData);
