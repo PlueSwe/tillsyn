@@ -486,9 +486,9 @@ function renderTags(activeData){
     `<span class="tag ${activeTypes.size===0?'act':''}" onclick="activeTypes.clear();applyFilters()">Alla</span>`+
     typs.map(t=>`<span class="tag ${activeTypes.has(t)?'act':''}" onclick="toggleFilter(activeTypes,'${t}')">${t}</span>`).join('');
 
-  document.getElementById('skolformTags').innerHTML=forms.map(f=>
-    `<span class="tag ${activeSkolform.has(f)?'act':''}" onclick="toggleFilter(activeSkolform,'${f}')">${f}</span>`
-  ).join('');
+  document.getElementById('skolformTags').innerHTML=
+    `<span class="tag ${activeSkolform.size===0?'act':''}" onclick="activeSkolform.clear();applyFilters()">Alla</span>`+
+    forms.map(f=>`<span class="tag ${activeSkolform.has(f)?'act':''}" onclick="toggleFilter(activeSkolform,'${f}')">${f==='Flera'?'Fler skolformer':f}</span>`).join('');
 
   document.getElementById('driftTags').innerHTML=
     `<span class="tag ak ${activeDrift.has('Kommunal')?'act':''}" onclick="toggleFilter(activeDrift,'Kommunal')"><span style="width:7px;height:7px;border-radius:50%;background:#3B6D11;display:inline-block;margin-right:3px;"></span>Kommunal</span>
