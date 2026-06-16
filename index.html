@@ -58,7 +58,8 @@ input[type=checkbox]{accent-color:var(--brand);width:13px;height:13px;cursor:poi
 .tag.act{background:var(--brand);border-color:var(--brand);color:#fff;}
 .tag.ak.act{background:#2d6a16;border-color:#2d6a16;color:#fff;}
 .tag.af.act{background:#a84a00;border-color:#a84a00;color:#fff;}
-.tag-list{display:flex;flex-wrap:wrap;gap:5px;}
+.tag-list{display:flex;flex-wrap:wrap;gap:6px;}
+#monthTags{gap:8px;}
 .info-note{font-size:11px;color:var(--ts);padding:5px 10px;background:var(--yellow-light);border-radius:var(--rm);border-left:3px solid var(--yellow);}
 
 /* ── Metrics ── */
@@ -429,9 +430,7 @@ function buildMonthFilter(activeData){
     `<span class="tag ${activeMonths.has(m)?'act':''}" onclick="toggleMonth(${m})">${MONTHS_SV[m-1]}</span>`
   ).join('');
 
-  const approxCount = activeData.filter(d=>d.datum_approx).length;
-  note.style.display = approxCount > 0 ? '' : 'none';
-  if(approxCount > 0) note.textContent = `${approxCount} beslut har uppskattat månad (API ger ej exakt datum) – visas som ~Månad`;
+  note.style.display = 'none';
 }
 
 function toggleMonth(m){
