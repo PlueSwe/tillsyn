@@ -140,7 +140,7 @@ input[type=checkbox]{accent-color:var(--brand);width:13px;height:13px;cursor:poi
   <div class="year-bar" id="yearBar">
     <span style="font-size:11px;color:var(--ts);font-weight:500;text-transform:uppercase;letter-spacing:.04em;margin-right:4px;">År</span>
     <button class="year-tab active" onclick="toggleYear(2026)" id="yt2026">2026</button>
-    <button class="year-tab" onclick="toggleYear(2025)" id="yt2025">2025</button>
+    <button class="year-tab active" onclick="toggleYear(2025)" id="yt2025">2025</button>
     <button class="year-tab" onclick="toggleYear(2024)" id="yt2024">2024</button>
     <span id="loadingMsg" class="loading-msg" style="display:none"><i class="ti ti-loader-2" style="animation:spin 1s linear infinite;display:inline-block;"></i> Hämtar beslut…</span>
     <span style="font-size:11px;color:var(--tt);margin-left:6px;">Klicka flera år för jämförelse</span>
@@ -320,13 +320,13 @@ const BRC = {Norrland:'bn',Svealand:'bs2','Götaland':'bg'};
 const RBTNAC = {Norrland:'#185FA5',Svealand:'#534AB7','Götaland':'#0F6E56'};
 const RBTNAL = {Norrland:'#E6F1FB',Svealand:'#EEEDFE','Götaland':'#E1F5EE'};
 const BANDS = [{name:'Norrland',col:'#378ADD',latN:69.5,latS:62.2},{name:'Svealand',col:'#7F77DD',latN:62.2,latS:59.0},{name:'Götaland',col:'#1D9E75',latN:59.0,latS:55.0}];
-const YEAR_COLS = {2026:'#004b62', 2025:'#00697f', 2024:'#00849c'};
+const YEAR_COLS = {2026:'#004b62', 2025:'#fbba30', 2024:'#1D9E75'};
 
 let DATA = [...SEEDED];
 let activeRegions=new Set(),activeTypes=new Set(),activeSkolform=new Set(),activeDrift=new Set(),activeMonths=new Set();
 let sortCol='datum',sortDir=-1;
 let rChart=null,dChart=null,mapReady=false;
-let activeYears=new Set([2026]), yearDataLoaded={2026:true,2025:false,2024:false};
+let activeYears=new Set([2026,2025]), yearDataLoaded={2026:true,2025:false,2024:false};
 
 // ── Map ─────────────────────────────────────────────────────────────────────
 const W=176,H=400;
@@ -614,7 +614,8 @@ function applyFilters(){
   renderTable(f);
 }
 
-applyFilters();
+// Load 2025 on startup since it's active by default, then render
+(async()=>{ await loadYearFromProxy(2025); applyFilters(); })();
 </script>
 <style>@keyframes spin{to{transform:rotate(360deg);}}</style>
 </body>
