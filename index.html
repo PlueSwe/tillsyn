@@ -23,7 +23,7 @@ body{font-family:var(--fs);background:var(--bs);color:var(--tp);min-height:100vh
 .si-header{background:var(--brand);padding:0;}
 .si-header-inner{max-width:1100px;margin:0 auto;padding:14px 1rem;display:flex;align-items:center;gap:16px;}
 .si-logo{display:flex;align-items:center;}
-.si-logo svg{height:28px;width:auto;}
+.si-logo svg{height:42px;width:auto;}
 .si-logo svg .st1,.si-logo svg .st2{fill:#fff;}
 .si-logo svg .st3{fill:var(--yellow);}
 .si-tagline{font-size:11px;color:rgba(255,255,255,.65);font-weight:600;text-transform:uppercase;letter-spacing:.08em;border-left:1px solid rgba(255,255,255,.25);padding-left:14px;margin-left:2px;}
@@ -150,10 +150,6 @@ input[type=checkbox]{accent-color:var(--brand);width:13px;height:13px;cursor:poi
     <span style="font-size:11px;color:var(--ts);font-weight:500;text-transform:uppercase;letter-spacing:.04em;margin-right:4px;">Månad</span>
     <div class="tag-list" id="monthTags"></div>
     <span class="info-note" id="monthNote" style="display:none;margin-left:8px;"></span>
-  </div>
-  <div class="toggle-row" id="knownTypRow" style="display:none;">
-    <input type="checkbox" id="onlyKnownTyp" onchange="applyFilters()">
-    <label class="toggle-label" for="onlyKnownTyp">Visa bara beslut med känd beslutstyp</label>
   </div>
 </div>
 
@@ -418,13 +414,12 @@ function buildMonthFilter(activeData){
   const monthTags = document.getElementById('monthTags');
   const note = document.getElementById('monthNote');
 
-  // Month filter only makes sense for single year with dated entries
-  if(activeYears.size > 1){ monthBar.style.display='none'; return; }
-
   const withDates = activeData.filter(d=>d.datum);
-  if(!withDates.length){ monthBar.style.display='none'; return; }
-
   const months = [...new Set(withDates.map(d=>parseInt(d.datum.split('-')[1])))].sort((a,b)=>a-b);
+
+  // Only show month filter when there are multiple months to choose from
+  if(months.length < 2){ monthBar.style.display='none'; activeMonths.clear(); return; }
+
   monthBar.style.display='';
   monthTags.innerHTML = months.map(m=>
     `<span class="tag ${activeMonths.has(m)?'act':''}" onclick="toggleMonth(${m})">${MONTHS_SV[m-1]}</span>`
@@ -432,7 +427,7 @@ function buildMonthFilter(activeData){
 
   const withoutDates = activeData.filter(d=>!d.datum).length;
   note.style.display = withoutDates > 0 ? '' : 'none';
-  if(withoutDates > 0) note.textContent = `${withoutDates} beslut utan exakt datum visas ej vid månadsfiltrering`;
+  if(withoutDates > 0) note.textContent = `${withoutDates} beslut saknar exakt datum och visas ej vid månadsfiltrering`;
 }
 
 function toggleMonth(m){
@@ -458,9 +453,7 @@ function getActiveData(){
 
 function getFiltered(){
   const q=document.getElementById('searchInput').value.toLowerCase();
-  const onlyKnown=document.getElementById('onlyKnownTyp')?.checked;
   return getActiveData().filter(b=>{
-    if(onlyKnown && !b.typ) return false;
     if(activeRegions.size&&!activeRegions.has(b.region)) return false;
     if(activeTypes.size&&!activeTypes.has(b.typ)) return false;
     if(activeSkolform.size&&!activeSkolform.has(b.skolform)) return false;
@@ -480,7 +473,6 @@ function toggleFilter(set,val){if(set.has(val)) set.delete(val); else set.add(va
 function clearFilters(){
   activeRegions.clear();activeTypes.clear();activeSkolform.clear();activeDrift.clear();activeMonths.clear();
   document.getElementById('searchInput').value='';
-  const cb=document.getElementById('onlyKnownTyp'); if(cb) cb.checked=false;
   applyFilters();
 }
 
@@ -501,9 +493,6 @@ function renderTags(activeData){
     `<span class="tag ak ${activeDrift.has('Kommunal')?'act':''}" onclick="toggleFilter(activeDrift,'Kommunal')"><span style="width:7px;height:7px;border-radius:50%;background:#3B6D11;display:inline-block;margin-right:3px;"></span>Kommunal</span>
      <span class="tag af ${activeDrift.has('Friskola')?'act':''}" onclick="toggleFilter(activeDrift,'Friskola')"><span style="width:7px;height:7px;border-radius:50%;background:#854F0B;display:inline-block;margin-right:3px;"></span>Friskola</span>`;
 
-  // Show "only known type" toggle if there are entries without type
-  const hasUnknown = activeData.some(b=>!b.typ);
-  document.getElementById('knownTypRow').style.display = hasUnknown ? '' : 'none';
 }
 
 function renderMetrics(f){
