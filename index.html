@@ -482,9 +482,9 @@ function renderTags(activeData){
   const typs=[...new Set(activeData.map(b=>b.typ).filter(Boolean))].sort();
   const forms=[...new Set(activeData.map(b=>b.skolform).filter(d=>d&&d!=='Okänd'))].sort();
 
-  document.getElementById('typeTags').innerHTML=typs.map(t=>
-    `<span class="tag ${activeTypes.has(t)?'act':''}" onclick="toggleFilter(activeTypes,'${t}')">${t}</span>`
-  ).join('');
+  document.getElementById('typeTags').innerHTML=
+    `<span class="tag ${activeTypes.size===0?'act':''}" onclick="activeTypes.clear();applyFilters()">Alla</span>`+
+    typs.map(t=>`<span class="tag ${activeTypes.has(t)?'act':''}" onclick="toggleFilter(activeTypes,'${t}')">${t}</span>`).join('');
 
   document.getElementById('skolformTags').innerHTML=forms.map(f=>
     `<span class="tag ${activeSkolform.has(f)?'act':''}" onclick="toggleFilter(activeSkolform,'${f}')">${f}</span>`
