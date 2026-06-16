@@ -591,6 +591,7 @@ function renderTable(f){
       </span>
     </div>`).join('');
   if(f.length>100) body.innerHTML+=`<div class="empty" style="padding:.5rem;font-size:11px">Visar 100 av ${f.length}</div>`;
+  scheduleDateFetch(shown);
 }
 
 function applyFilters(){
@@ -602,6 +603,40 @@ function applyFilters(){
   updateMap(f);
   renderCharts(f);
   renderTable(f);
+}
+
+// ── Fetch exact dates from PDFs ───────────────────────────────────────────
+let dateFetchTimer = null;
+const fetchedDocIds = new Set();
+
+function scheduleDateFetch(rows) {
+  clearTimeout(dateFetchTimer);
+  dateFetchTimer = setTimeout(() => fetchDatesForRows(rows), 600);
+}
+
+async function fetchDatesForRows(rows) {
+  const needed = rows.filter(b => (b.datum_approx || !b.datum) && !fetchedDocIds.has(b.docid));
+  if (!needed.length) return;
+  needed.forEach(b => fetchedDocIds.add(b.docid));
+
+  try {
+    const ids = needed.map(b => b.docid).join(',');
+    const res = await fetch(`proxy.php?action=fetch_dates&docids=${ids}`);
+    if (!res.ok) return;
+    const dates = await res.json();
+
+    let changed = false;
+    Object.entries(dates).forEach(([docid, date]) => {
+      if (!date) return;
+      const entry = DATA.find(d => d.docid == docid);
+      if (entry && entry.datum !== date) {
+        entry.datum = date;
+        entry.datum_approx = false;
+        changed = true;
+      }
+    });
+    if (changed) applyFilters();
+  } catch(e) { /* silent fail */ }
 }
 
 // Load 2025 on startup since it's active by default, then render

@@ -157,6 +157,19 @@ function landsdel($kod) {
     return 'Götaland';
 }
 
+// ── Extract beslutsdatum from PDF binary ──────────────────────────────────
+function extract_date_from_pdf($body) {
+    if (!$body) return null;
+    // XMP format: <xmp:ModifyDate>2026-06-15T...
+    if (preg_match('/<xmp:ModifyDate>(20\d{2}-\d{2}-\d{2})/', $body, $m)) return $m[1];
+    // Traditional PDF: ModDate(D:20260616...
+    if (preg_match('/ModDate\(D:(20\d{6})/', $body, $m)) {
+        $s = $m[1];
+        return substr($s,0,4).'-'.substr($s,4,2).'-'.substr($s,6,2);
+    }
+    return null;
+}
+
 // ── Actions ───────────────────────────────────────────────────────────────
 
 if ($action === 'municipalities') {
@@ -236,6 +249,36 @@ if ($action === 'decisions' && $ar) {
     usort($all, fn($a,$b) => $b['docid'] - $a['docid']);
     cache_write($cache_key, $all);
     echo json_encode($all, JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
+if ($action === 'fetch_dates') {
+    $raw_ids = preg_split('/[,\s]+/', $_GET['docids'] ?? '');
+    $docids  = array_filter(array_map('intval', $raw_ids), fn($d) => $d > 100000);
+
+    $results  = [];
+    $to_fetch = [];
+
+    foreach ($docids as $docid) {
+        $cached = cache_read('pdfdate_'.$docid, 86400 * 60); // cache 60 days
+        if ($cached !== null) {
+            $results[$docid] = $cached['d'];
+        } else {
+            $to_fetch[$docid] = "http://siris.skolverket.se/siris/ris.openfile?docID=$docid";
+        }
+    }
+
+    if ($to_fetch) {
+        // Fetch in batches of 10 (PDFs are large)
+        $raw = fetch_parallel($to_fetch, 10);
+        foreach ($raw as $docid => $body) {
+            $date = extract_date_from_pdf($body);
+            cache_write('pdfdate_'.$docid, ['d' => $date]);
+            $results[$docid] = $date;
+        }
+    }
+
+    echo json_encode($results, JSON_UNESCAPED_UNICODE);
     exit;
 }
 
