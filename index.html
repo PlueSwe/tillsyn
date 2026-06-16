@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Senaste beslut – Skolinspektionen</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brand:#004b62;--brand-dark:#002e3c;--brand-light:#e6f0f3;
+  --yellow:#fbba30;--yellow-light:#fef6e0;
+  --tp:#1d1d1b;--ts:#4a6070;--tt:#7a96a4;
+  --bp:#ffffff;--bs:#f0f4f6;--bt:#d0dde3;--bb:#b8cdd5;
+  --rm:4px;--rl:8px;
+  --fs:'Mulish',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--fs);background:var(--bs);color:var(--tp);min-height:100vh;font-size:14px;}
+
+/* ── Header ── */
+.si-header{background:var(--brand);padding:0;}
+.si-header-inner{max-width:1100px;margin:0 auto;padding:14px 1rem;display:flex;align-items:center;gap:16px;}
+.si-logo{display:flex;align-items:center;}
+.si-logo svg{height:28px;width:auto;}
+.si-logo svg .st1,.si-logo svg .st2{fill:#fff;}
+.si-logo svg .st3{fill:var(--yellow);}
+.si-tagline{font-size:11px;color:rgba(255,255,255,.65);font-weight:600;text-transform:uppercase;letter-spacing:.08em;border-left:1px solid rgba(255,255,255,.25);padding-left:14px;margin-left:2px;}
+.si-sub-header{background:#003650;border-bottom:3px solid var(--yellow);}
+.si-sub-inner{max-width:1100px;margin:0 auto;padding:8px 1rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.si-sub-title{font-size:15px;font-weight:700;color:#fff;flex:1;}
+.sw{position:relative;}
+.sw i{position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--tt);pointer-events:none;}
+input[type=text]{padding:7px 10px 7px 32px;border:1px solid var(--bb);border-radius:var(--rm);background:#fff;color:var(--tp);font-size:13px;outline:none;width:190px;font-family:var(--fs);}
+input[type=text]:focus{border-color:var(--brand);box-shadow:0 0 0 2px rgba(0,75,98,.15);}
+.btn-sm{font-size:12px;color:var(--ts);cursor:pointer;padding:6px 12px;border:1px solid var(--bb);background:#fff;border-radius:var(--rm);font-family:var(--fs);font-weight:600;}
+.btn-sm:hover{background:var(--bs);}
+
+/* ── Page ── */
+.page{max-width:1100px;margin:0 auto;padding:1.2rem 1rem 2rem;}
+
+/* ── Year/month bar ── */
+.year-bar{display:flex;gap:6px;align-items:center;margin-bottom:4px;flex-wrap:wrap;}
+.ybar-label{font-size:11px;color:var(--ts);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-right:2px;}
+.year-tab{padding:5px 16px;border-radius:var(--rm);border:1px solid var(--bb);background:#fff;color:var(--ts);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;font-family:var(--fs);}
+.year-tab.active{background:var(--brand);border-color:var(--brand);color:#fff;}
+.year-tab:hover:not(.active){border-color:var(--brand);color:var(--brand);}
+.year-tab.loading{opacity:.6;pointer-events:none;}
+.loading-msg{font-size:12px;color:var(--ts);padding:4px 0;}
+.toggle-row{display:flex;align-items:center;gap:6px;margin-top:6px;}
+.toggle-label{font-size:11px;color:var(--ts);cursor:pointer;user-select:none;}
+input[type=checkbox]{accent-color:var(--brand);width:13px;height:13px;cursor:pointer;}
+.tag{display:inline-flex;align-items:center;gap:3px;padding:4px 11px;border-radius:var(--rm);font-size:12px;cursor:pointer;border:1px solid var(--bb);background:#fff;color:var(--ts);transition:all .12s;user-select:none;font-weight:600;}
+.tag:hover{border-color:var(--brand);color:var(--brand);}
+.tag.act{background:var(--brand);border-color:var(--brand);color:#fff;}
+.tag.ak.act{background:#2d6a16;border-color:#2d6a16;color:#fff;}
+.tag.af.act{background:#a84a00;border-color:#a84a00;color:#fff;}
+.tag-list{display:flex;flex-wrap:wrap;gap:5px;}
+.info-note{font-size:11px;color:var(--ts);padding:5px 10px;background:var(--yellow-light);border-radius:var(--rm);border-left:3px solid var(--yellow);}
+
+/* ── Metrics ── */
+.metric-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:1rem;}
+.metric{background:#fff;border-radius:var(--rm);padding:12px 14px;border:1px solid var(--bt);border-top:3px solid var(--brand);}
+.ml{font-size:11px;color:var(--ts);margin-bottom:2px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;}
+.mv{font-size:22px;font-weight:800;color:var(--brand);}
+
+/* ── Main layout ── */
+.main-grid{display:grid;grid-template-columns:200px 1fr;gap:12px;align-items:start;}
+.map-panel{background:#fff;border:1px solid var(--bt);border-radius:var(--rl);padding:12px;}
+.map-title{font-size:11px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;}
+.region-btn{display:flex;align-items:center;justify-content:space-between;width:100%;padding:7px 10px;margin-bottom:5px;border-radius:var(--rm);border:1px solid var(--bt);background:var(--bs);cursor:pointer;font-size:12px;font-weight:600;color:var(--tp);transition:all .15s;font-family:var(--fs);}
+.region-btn:hover{border-color:var(--brand);}
+.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-right:7px;}
+.mu{color:var(--ts);font-size:11px;}
+.right-col{display:flex;flex-direction:column;gap:10px;}
+.filter-box{background:#fff;border:1px solid var(--bt);border-radius:var(--rl);padding:12px;}
+.filter-row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start;}
+.fg{display:flex;flex-direction:column;gap:5px;}
+.fl{font-size:11px;color:var(--ts);font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
+
+/* ── Charts ── */
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.chart-card{background:#fff;border:1px solid var(--bt);border-radius:var(--rl);padding:12px;}
+.ct{font-size:12px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;}
+
+/* ── Table ── */
+.table-card{background:#fff;border:1px solid var(--bt);border-radius:var(--rl);overflow:hidden;}
+.th{display:grid;grid-template-columns:1fr 100px 130px 90px 65px;background:var(--brand);border-bottom:none;}
+.th-cell{padding:9px 10px;font-size:11px;font-weight:700;color:rgba(255,255,255,.8);cursor:pointer;user-select:none;display:flex;align-items:center;gap:4px;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em;}
+.th-cell:hover{color:#fff;}.th-cell.act{color:#fff;}
+.si{font-size:10px;opacity:.5;}.si.on{opacity:1;color:var(--yellow);}
+.tr{display:grid;grid-template-columns:1fr 100px 130px 90px 65px;padding:9px 10px;border-bottom:1px solid var(--bt);font-size:13px;color:var(--tp);align-items:center;}
+.tr:last-child{border-bottom:none;}.tr:hover{background:var(--brand-light);}
+.badge{font-size:10px;padding:3px 8px;border-radius:var(--rm);display:inline-block;white-space:nowrap;font-weight:700;}
+.bn{background:#dceef4;color:#004b62;}.bs2{background:#e8e6f8;color:#3a2f8c;}.bg{background:#d9f0e8;color:#0a5c42;}
+.bk{background:#d8edcc;color:#245410;}.bf{background:#fde8d5;color:#7a3300;}
+.bt2{background:var(--bs);color:var(--ts);border:1px solid var(--bt);}
+.bl{background:var(--brand);color:#fff !important;text-decoration:none;cursor:pointer;transition:background .12s;display:inline-flex;align-items:center;gap:3px;font-weight:700;}
+.bl:hover{background:var(--brand-dark);}
+.empty{padding:1.5rem;text-align:center;color:var(--tt);font-size:13px;}
+.legend-row{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--ts);margin-top:8px;}
+.li{display:flex;align-items:center;gap:4px;}.lsq{width:9px;height:9px;border-radius:2px;flex-shrink:0;}
+#mapSvg .map-region{cursor:pointer;transition:opacity .15s;}
+#mapSvg .map-region:hover{opacity:.82;}
+.footer{text-align:center;font-size:12px;color:var(--tt);margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--bt);}
+.footer a{color:var(--brand);text-decoration:none;font-weight:600;}
+.footer a:hover{text-decoration:underline;}
+@media(max-width:700px){.main-grid{grid-template-columns:1fr;}.metric-row{grid-template-columns:repeat(3,1fr);}.chart-row{grid-template-columns:1fr;}.th,.tr{grid-template-columns:1fr 90px 60px;}.th-cell:nth-child(3),.th-cell:nth-child(4),.tr>span:nth-child(3),.tr>span:nth-child(4){display:none;}}
+</style>
+</head>
+<body>
+
+<!-- Skolinspektionen header -->
+<header class="si-header">
+  <div class="si-header-inner">
+    <a class="si-logo" href="https://skolinspektionen.se" target="_blank" rel="noopener" aria-label="Skolinspektionen">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 199.05 34.17" aria-hidden="true">
+        <defs><style>.st0{fill:none}.st1{fill:#fff}.st2{fill:#fff}.st3{fill:#fbba30}</style></defs>
+        <path class="st3" d="M27.69,14.75c0-1.2-.97-2.17-2.17-2.17s-2.17.97-2.17,2.17h0c0,2.41-.94,4.67-2.64,6.37-1.7,1.7-3.96,2.64-6.37,2.64h0c-2.41,0-4.67-.94-6.37-2.64-1.7-1.7-2.64-3.96-2.64-6.37H1c0,7.37,5.97,13.34,13.34,13.34s13.34-5.97,13.34-13.34Z"/>
+        <path class="st2" d="M12.18,14.34c0,1.2.97,2.17,2.17,2.17s2.17-.97,2.17-2.17h0c0-2.41.94-4.67,2.64-6.37,1.7-1.7,3.96-2.64,6.37-2.64h0c2.41,0,4.67.94,6.37,2.64,1.7,1.7,2.64,3.96,2.64,6.37h4.33c0-7.37-5.97-13.34-13.34-13.34s-13.34,5.97-13.34,13.34Z"/>
+        <g><path class="st1" d="M32.58,27.53c-.62,0-1.23-.07-1.73-.2v-1.92h.79c.07.4.12.76.16,1.07.25.06.56.11.84.11.98,0,1.79-.4,1.79-1.39,0-1.83-3.7-1.08-3.7-3.69,0-1.33,1.06-2.3,2.87-2.3.56,0,1.03.06,1.56.16v1.86h-.79c-.07-.38-.12-.75-.14-1.05-.17-.04-.44-.06-.67-.06-1.11,0-1.67.5-1.67,1.26,0,1.75,3.7,1.11,3.7,3.65,0,1.45-1.14,2.5-3,2.5Z"/><path class="st1" d="M40.54,27.42l-2.32-3.12v2.32c.32.02.65.08.9.16v.65h-3.02v-.64c.31-.08.69-.14,1.05-.17v-7.13c-.29-.05-.7-.1-1.05-.12v-.64c.6-.07,1.43-.12,2.12-.08v5.53l1.74-1.93c-.29-.04-.54-.07-.71-.14v-.65h2.85v.65c-.24.07-.55.12-.85.16l-1.8,1.92,1.89,2.43c.29.02.64.1.96.16v.66h-1.75Z"/><path class="st1" d="M45.19,27.53c-1.62,0-2.68-.94-2.68-3.04,0-1.75,1.11-3.15,2.91-3.15,1.53,0,2.69.84,2.69,2.99,0,1.8-1.15,3.2-2.92,3.2ZM45.33,22.24c-.87,0-1.68.66-1.68,2.14s.59,2.23,1.68,2.23c.89,0,1.66-.7,1.66-2.22,0-1.36-.55-2.15-1.66-2.15Z"/><path class="st1" d="M51.58,26.78v.64h-3.14v-.64c.31-.08.68-.14,1.05-.17v-7.13c-.29-.05-.7-.1-1.05-.12v-.64c.6-.07,1.43-.12,2.12-.08v7.97c.36.02.72.08,1.02.17Z"/><path class="st1" d="M52.2,27.42v-.64c.31-.08.68-.14,1.05-.17v-4.33c-.29-.05-.7-.1-1.05-.12v-.64c.6-.07,1.43-.12,2.13-.08v5.17c.35.02.71.08,1.01.17v.64h-3.14ZM53.8,20.46c-.4,0-.72-.31-.72-.71s.32-.7.72-.7.71.3.71.7-.32.71-.71.71Z"/><path class="st1" d="M60.8,23.56c0-.84-.23-1.33-1.01-1.33-1,0-1.71,1-1.71,2.32v2.07c.33.02.67.08.96.16v.65h-3.09v-.64c.31-.08.68-.14,1.04-.17v-4.33c-.29-.05-.7-.1-1.04-.12v-.64c.6-.07,1.43-.12,2.09-.08,0,.35-.02.9-.08,1.25h.01c.35-.82,1.08-1.37,2.12-1.37,1.36,0,1.79.85,1.79,1.91v3.38c.35.02.71.08,1.01.17v.64h-2.09v-3.86Z"/><path class="st1" d="M64.98,27.53c-.47,0-1.01-.05-1.41-.16v-1.69h.66c.06.29.11.64.14.95.2.04.47.06.71.06.8,0,1.36-.36,1.36-.94,0-1.32-3-.54-3-2.62,0-1.02.84-1.79,2.4-1.79.42,0,.93.06,1.38.17v1.63h-.66c-.07-.3-.12-.64-.14-.95-.2-.04-.44-.06-.67-.06-.81,0-1.21.34-1.21.88,0,1.35,2.99.6,2.99,2.58,0,1.08-.96,1.93-2.55,1.93Z"/><path class="st1" d="M71.11,27.49c-.37,0-.66-.01-1.01-.07v2.16c.36.02.73.08,1.05.16v.65h-3.17v-.65c.31-.07.68-.13,1.05-.16v-7.29c-.29-.05-.7-.1-1.05-.12v-.64c.6-.07,1.44-.12,2.08-.08,0,.34-.01.88-.08,1.21h.02c.34-.82,1.06-1.32,2-1.32,1.41,0,2.2.99,2.2,2.81,0,2.13-1.14,3.34-3.08,3.34ZM71.74,22.23c-1.08,0-1.63,1.26-1.63,2.31v1.97c.31.1.65.14,1.06.14,1.13,0,1.9-.69,1.9-2.4,0-1.29-.42-2.02-1.32-2.02Z"/><path class="st1" d="M79.97,24.37h-3.91c-.05,1.6.61,2.28,1.89,2.28.61,0,1.26-.14,1.74-.37l.1.88c-.58.24-1.27.37-2.02.37-1.84,0-2.82-.96-2.82-3.06,0-1.79.97-3.12,2.67-3.12s2.39,1.14,2.39,2.51c0,.14-.01.31-.04.52ZM77.56,22.13c-.78,0-1.33.59-1.45,1.47h2.79c.02-.88-.49-1.47-1.33-1.47Z"/><path class="st1" d="M85.04,27.42l-2.32-3.12v2.32c.32.02.65.08.9.16v.65h-3.02v-.64c.31-.08.69-.14,1.05-.17v-7.13c-.29-.05-.7-.1-1.05-.12v-.64c.6-.07,1.43-.12,2.12-.08v5.53l1.74-1.93c-.29-.04-.54-.07-.71-.14v-.65h2.85v.65c-.24.07-.55.12-.85.16l-1.8,1.92,1.89,2.43c.29.02.64.1.96.16v.66h-1.75Z"/><path class="st1" d="M89.98,27.51c-1.23,0-1.6-.51-1.6-1.79v-3.44h-1.23v-.84h1.23v-1.93l1.08-.3v2.23h1.67v.84h-1.67v3.05c0,.99.18,1.25.85,1.25.28,0,.58-.05.82-.11v.91c-.34.07-.77.12-1.15.12Z"/><path class="st1" d="M91.84,27.42v-.64c.31-.08.69-.14,1.05-.17v-4.33c-.29-.05-.7-.1-1.05-.12v-.64c.6-.07,1.43-.12,2.13-.08v5.17c.35.02.71.08,1.01.17v.64h-3.14ZM93.44,20.46c-.4,0-.72-.31-.72-.71s.32-.7.72-.7.71.3.71.7-.32.71-.71.71Z"/><path class="st1" d="M97.9,27.53c-1.62,0-2.68-.94-2.68-3.04,0-1.75,1.11-3.15,2.91-3.15,1.53,0,2.69.84,2.69,2.99,0,1.8-1.15,3.2-2.92,3.2ZM98.03,22.24c-.86,0-1.68.66-1.68,2.14s.59,2.23,1.68,2.23c.89,0,1.66-.7,1.66-2.22,0-1.36-.55-2.15-1.66-2.15Z"/><path class="st1" d="M106.01,23.56c0-.84-.23-1.33-1.01-1.33-1,0-1.71,1-1.71,2.32v2.07c.32.02.67.08.96.16v.65h-3.09v-.64c.31-.08.68-.14,1.05-.17v-4.33c-.29-.05-.7-.1-1.05-.12v-.64c.6-.07,1.43-.12,2.09-.08,0,.35-.02.9-.08,1.25h.01c.35-.82,1.08-1.37,2.12-1.37,1.36,0,1.79.85,1.79,1.91v3.38c.35.02.71.08,1.01.17v.64h-2.09v-3.86Z"/><path class="st1" d="M113.37,24.37h-3.91c-.05,1.6.61,2.28,1.89,2.28.61,0,1.26-.14,1.74-.37l.1.88c-.58.24-1.27.37-2.02.37-1.84,0-2.82-.96-2.82-3.06,0-1.79.97-3.12,2.67-3.12s2.39,1.14,2.39,2.51c0,.14-.01.31-.04.52ZM110.96,22.13c-.78,0-1.33.59-1.45,1.47h2.79c.02-.88-.49-1.47-1.33-1.47Z"/><path class="st1" d="M118.91,23.56c0-.84-.23-1.33-1.01-1.33-1,0-1.71,1-1.71,2.32v2.07c.32.02.67.08.96.16v.65h-3.09v-.64c.31-.08.69-.14,1.05-.17v-4.33c-.29-.05-.7-.1-1.05-.12v-.64c.6-.07,1.43-.12,2.09-.08,0,.35-.02.9-.08,1.25h.01c.35-.82,1.08-1.37,2.12-1.37,1.36,0,1.79.85,1.79,1.91v3.38c.35.02.71.08,1.01.17v.64h-2.09v-3.86Z"/></g>
+      </svg>
+    </a>
+    <span class="si-tagline">Beslut &amp; tillsyn</span>
+  </div>
+</header>
+<div class="si-sub-header">
+  <div class="si-sub-inner">
+    <h1 class="si-sub-title">Senaste beslut</h1>
+    <div class="sw"><i class="ti ti-search"></i><input type="text" id="searchInput" placeholder="Sök skola eller kommun…" oninput="applyFilters()"></div>
+    <button class="btn-sm" onclick="clearFilters()"><i class="ti ti-refresh"></i> Rensa filter</button>
+  </div>
+</div>
+
+<div class="page">
+
+<!-- Year picker -->
+<div style="margin-bottom:.8rem;">
+  <div class="year-bar" id="yearBar">
+    <span style="font-size:11px;color:var(--ts);font-weight:500;text-transform:uppercase;letter-spacing:.04em;margin-right:4px;">År</span>
+    <button class="year-tab active" onclick="toggleYear(2026)" id="yt2026">2026</button>
+    <button class="year-tab" onclick="toggleYear(2025)" id="yt2025">2025</button>
+    <button class="year-tab" onclick="toggleYear(2024)" id="yt2024">2024</button>
+    <span id="loadingMsg" class="loading-msg" style="display:none"><i class="ti ti-loader-2" style="animation:spin 1s linear infinite;display:inline-block;"></i> Hämtar beslut…</span>
+    <span style="font-size:11px;color:var(--tt);margin-left:6px;">Klicka flera år för jämförelse</span>
+  </div>
+  <!-- Month filter (only shown for single year with dates) -->
+  <div id="monthBar" style="display:none;margin-top:6px;">
+    <span style="font-size:11px;color:var(--ts);font-weight:500;text-transform:uppercase;letter-spacing:.04em;margin-right:4px;">Månad</span>
+    <div class="tag-list" id="monthTags"></div>
+    <span class="info-note" id="monthNote" style="display:none;margin-left:8px;"></span>
+  </div>
+  <div class="toggle-row" id="knownTypRow" style="display:none;">
+    <input type="checkbox" id="onlyKnownTyp" onchange="applyFilters()">
+    <label class="toggle-label" for="onlyKnownTyp">Visa bara beslut med känd beslutstyp</label>
+  </div>
+</div>
+
+<div class="metric-row">
+  <div class="metric"><div class="ml">Totalt</div><div class="mv" id="mTot">—</div></div>
+  <div class="metric"><div class="ml">Norrland</div><div class="mv" id="mNorr" style="color:#378ADD">—</div></div>
+  <div class="metric"><div class="ml">Svealand</div><div class="mv" id="mSvea" style="color:#7F77DD">—</div></div>
+  <div class="metric"><div class="ml">Götaland</div><div class="mv" id="mGota" style="color:#1D9E75">—</div></div>
+  <div class="metric"><div class="ml">Friskola %</div><div class="mv" id="mFri">—</div></div>
+</div>
+
+<div class="main-grid">
+  <div class="map-panel">
+    <div class="map-title"><i class="ti ti-map-pin" style="font-size:12px;"></i> Klicka för att filtrera</div>
+    <svg id="mapSvg" width="176" height="400" viewBox="0 0 176 400"></svg>
+    <div style="display:flex;flex-direction:column;gap:5px;margin-top:8px;">
+      <button class="region-btn" id="btnNorrland" onclick="toggleRegion('Norrland')"><span style="display:flex;align-items:center;"><span class="dot" style="background:#378ADD"></span>Norrland</span><span class="mu" id="btnNorrTxt">—</span></button>
+      <button class="region-btn" id="btnSvealand" onclick="toggleRegion('Svealand')"><span style="display:flex;align-items:center;"><span class="dot" style="background:#7F77DD"></span>Svealand</span><span class="mu" id="btnSveaTxt">—</span></button>
+      <button class="region-btn" id="btnGotaland" onclick="toggleRegion('Götaland')"><span style="display:flex;align-items:center;"><span class="dot" style="background:#1D9E75"></span>Götaland</span><span class="mu" id="btnGotaTxt">—</span></button>
+    </div>
+  </div>
+
+  <div class="right-col">
+    <div class="filter-box">
+      <div class="filter-row">
+        <div class="fg"><div class="fl">Skolform</div><div class="tag-list" id="skolformTags"></div></div>
+        <div class="fg"><div class="fl">Beslutstyp</div><div class="tag-list" id="typeTags"></div></div>
+        <div class="fg"><div class="fl">Driftsform</div><div class="tag-list" id="driftTags"></div></div>
+      </div>
+    </div>
+    <div class="chart-row">
+      <div class="chart-card"><div class="ct">Beslut per landsdel</div><div style="position:relative;height:160px;"><canvas id="regionChart"></canvas></div></div>
+      <div class="chart-card"><div class="ct">Kommunal vs friskola</div><div style="position:relative;height:120px;"><canvas id="driftChart"></canvas></div><div id="driftLegend" class="legend-row"></div></div>
+    </div>
+    <div class="table-card">
+      <div class="th" id="tableHead">
+        <div class="th-cell" onclick="setSort('skola')">Skola <i class="ti ti-arrows-sort si" id="si-skola"></i></div>
+        <div class="th-cell th-cell-ar" style="display:none" onclick="setSort('ar')">År <i class="ti ti-arrows-sort si" id="si-ar"></i></div>
+        <div class="th-cell act" onclick="setSort('datum')">Datum <i class="ti ti-sort-descending si on" id="si-datum"></i></div>
+        <div class="th-cell" onclick="setSort('typ')">Beslutstyp <i class="ti ti-arrows-sort si" id="si-typ"></i></div>
+        <div class="th-cell" onclick="setSort('region')">Landsdel <i class="ti ti-arrows-sort si" id="si-region"></i></div>
+        <div class="th-cell" onclick="setSort('drift')">Drift <i class="ti ti-arrows-sort si" id="si-drift"></i></div>
+      </div>
+      <div id="tableBody"></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">Data från <a href="https://skolinspektionen.se/beslut-rapporter/sok-beslut/" target="_blank" rel="noopener">Skolinspektionen</a> · Beslut öppnas i SIRIS-systemet · Ej officiell webbplats</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ── Inbyggd data (de senaste 100 besluten med riktiga datum & driftsform) ──
+const SEEDED = [
+  {skola:"Vuxenutbildning Sollefteå",kommun:"Sollefteå",region:"Norrland",typ:"Planerad tillsyn",skolform:"Vuxenutbildning",ar:2026,datum:"2026-06-16",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666489",docid:666489},
+  {skola:"Lidköping Campus Västra Skaraborg",kommun:"Lidköping",region:"Götaland",typ:"Planerad tillsyn",skolform:"Vuxenutbildning",ar:2026,datum:"2026-06-16",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666488",docid:666488},
+  {skola:"Malmabergsskolan",kommun:"Västerås",region:"Svealand",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-16",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666487",docid:666487},
+  {skola:"Källtorpskolan",kommun:"Järfälla",region:"Svealand",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-16",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666486",docid:666486},
+  {skola:"Skiftingehus F-9",kommun:"Eskilstuna",region:"Svealand",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-16",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666485",docid:666485},
+  {skola:"Attarpsskolan F-6",kommun:"Jönköping",region:"Götaland",typ:"Tematisk granskning",skolform:"Grundskola",ar:2026,datum:"2026-06-16",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666483",docid:666483},
+  {skola:"Norrtälje (tematisk)",kommun:"Norrtälje",region:"Svealand",typ:"Tematisk granskning",skolform:"Flera",ar:2026,datum:"2026-06-16",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666484",docid:666484},
+  {skola:"Stråtjära skola",kommun:"Söderhamn",region:"Norrland",typ:"Planerad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-16",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666482",docid:666482},
+  {skola:"Järfälla vuxenutbildning",kommun:"Järfälla",region:"Svealand",typ:"Planerad tillsyn",skolform:"Vuxenutbildning",ar:2026,datum:"2026-06-16",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666481",docid:666481},
+  {skola:"Dahlander kunskapscentrum",kommun:"Säter",region:"Svealand",typ:"Riktad tillsyn",skolform:"Gymnasieskola",ar:2026,datum:"2026-06-16",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666480",docid:666480},
+  {skola:"Härryda gymnasieskola",kommun:"Härryda",region:"Götaland",typ:"Riktad tillsyn",skolform:"Gymnasieskola",ar:2026,datum:"2026-06-16",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666479",docid:666479},
+  {skola:"Peabskolan Malmö",kommun:"Malmö",region:"Götaland",typ:"Riktad tillsyn",skolform:"Gymnasieskola",ar:2026,datum:"2026-06-16",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666478",docid:666478},
+  {skola:"Skogshagaskolan (förskoleklass)",kommun:"Västervik",region:"Götaland",typ:"Riktad tillsyn",skolform:"Förskoleklass",ar:2026,datum:"2026-06-16",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666477",docid:666477},
+  {skola:"Skogshagaskolan",kommun:"Västervik",region:"Götaland",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-16",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666476",docid:666476},
+  {skola:"Lilla Nacka Skola",kommun:"Nacka",region:"Svealand",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-16",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666475",docid:666475},
+  {skola:"Lilla Nacka Skola (förskoleklass)",kommun:"Nacka",region:"Svealand",typ:"Riktad tillsyn",skolform:"Förskoleklass",ar:2026,datum:"2026-06-16",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666473",docid:666473},
+  {skola:"Mariaskolan",kommun:"Umeå",region:"Norrland",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-16",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666474",docid:666474},
+  {skola:"Uttersbergsskolan (förskoleklass)",kommun:"Norrköping",region:"Götaland",typ:"Riktad tillsyn",skolform:"Förskoleklass",ar:2026,datum:"2026-06-16",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666471",docid:666471},
+  {skola:"Uttersbergsskolan",kommun:"Norrköping",region:"Götaland",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-16",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666470",docid:666470},
+  {skola:"Bjärehovskolan",kommun:"Lomma",region:"Götaland",typ:"Tematisk granskning",skolform:"Grundskola",ar:2026,datum:"2026-06-16",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666468",docid:666468},
+  {skola:"Halmstad (tematisk)",kommun:"Halmstad",region:"Götaland",typ:"Tematisk granskning",skolform:"Flera",ar:2026,datum:"2026-06-16",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666469",docid:666469},
+  {skola:"Fyren EkAlmen AB",kommun:"Flera",region:"Götaland",typ:"Riktad tillsyn",skolform:"Flera",ar:2026,datum:"2026-06-16",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666467",docid:666467},
+  {skola:"Kunskapscompaniet ankaret AB",kommun:"Eskilstuna",region:"Svealand",typ:"Planerad tillsyn",skolform:"Vuxenutbildning",ar:2026,datum:"2026-06-15",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666466",docid:666466},
+  {skola:"Klaraskolan 5-9",kommun:"Halmstad",region:"Götaland",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-15",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666465",docid:666465},
+  {skola:"Komvux Malmö Ro 3",kommun:"Malmö",region:"Götaland",typ:"Planerad tillsyn",skolform:"Vuxenutbildning",ar:2026,datum:"2026-06-15",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666464",docid:666464},
+  {skola:"Ungärde skola",kommun:"Malung-Sälen",region:"Svealand",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-15",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666463",docid:666463},
+  {skola:"Parkskolan",kommun:"Östersund",region:"Norrland",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-15",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666462",docid:666462},
+  {skola:"NTI Gymnasiet Borlänge",kommun:"Borlänge",region:"Svealand",typ:"Riktad tillsyn",skolform:"Gymnasieskola",ar:2026,datum:"2026-06-15",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666461",docid:666461},
+  {skola:"Älvdalens Utbildningscentrum",kommun:"Älvdalen",region:"Svealand",typ:"Tematisk tillsyn",skolform:"Flera",ar:2026,datum:"2026-06-15",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666460",docid:666460},
+  {skola:"Sannerudsskolan 7-9",kommun:"Kil",region:"Svealand",typ:"Tematisk granskning",skolform:"Grundskola",ar:2026,datum:"2026-06-15",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666459",docid:666459},
+  {skola:"Östra Ringskolan",kommun:"Västervik",region:"Götaland",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-15",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666457",docid:666457},
+  {skola:"Robinson Fanna",kommun:"Enköping",region:"Svealand",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-15",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666458",docid:666458},
+  {skola:"Viktoriaskolan 1",kommun:"Skara",region:"Götaland",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-15",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666455",docid:666455},
+  {skola:"Ovanåker gymnasium",kommun:"Ovanåker",region:"Norrland",typ:"Riktad tillsyn",skolform:"Gymnasieskola",ar:2026,datum:"2026-06-15",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666454",docid:666454},
+  {skola:"Växsjö Byskola",kommun:"Bollnäs",region:"Norrland",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-15",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666453",docid:666453},
+  {skola:"Njurunda Friskola",kommun:"Sundsvall",region:"Norrland",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-15",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666451",docid:666451},
+  {skola:"Påskbergsskolan F-3",kommun:"Varberg",region:"Götaland",typ:"Tematisk granskning",skolform:"Grundskola",ar:2026,datum:"2026-06-15",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666450",docid:666450},
+  {skola:"Laröds skola",kommun:"Helsingborg",region:"Götaland",typ:"Tematisk granskning",skolform:"Grundskola",ar:2026,datum:"2026-06-15",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666452",docid:666452},
+  {skola:"Nyköping (tematisk)",kommun:"Nyköping",region:"Svealand",typ:"Tematisk granskning",skolform:"Flera",ar:2026,datum:"2026-06-15",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666449",docid:666449},
+  {skola:"Centrumskolan Lagaholm anpassad",kommun:"Laholm",region:"Götaland",typ:"Planerad tillsyn",skolform:"Anpassad grundskola",ar:2026,datum:"2026-06-15",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666448",docid:666448},
+  {skola:"Hovs skola",kommun:"Krokom",region:"Norrland",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-15",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666447",docid:666447},
+  {skola:"Hjortsbergsskolan",kommun:"Falkenberg",region:"Götaland",typ:"Tematisk granskning",skolform:"Grundskola",ar:2026,datum:"2026-06-15",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666446",docid:666446},
+  {skola:"Sidsjö Fristående Grundskola",kommun:"Sundsvall",region:"Norrland",typ:"Planerad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-15",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666445",docid:666445},
+  {skola:"Ribbaskolan F-6",kommun:"Jönköping",region:"Götaland",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-15",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666444",docid:666444},
+  {skola:"Komvux SFI",kommun:"Malmö",region:"Götaland",typ:"Planerad tillsyn",skolform:"Vuxenutbildning",ar:2026,datum:"2026-06-15",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666443",docid:666443},
+  {skola:"Vittra Örebro",kommun:"Örebro",region:"Svealand",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-15",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666442",docid:666442},
+  {skola:"Källeskolan",kommun:"Skara",region:"Götaland",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-15",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666441",docid:666441},
+  {skola:"Domnarvets skola",kommun:"Borlänge",region:"Svealand",typ:"Tematisk granskning",skolform:"Grundskola",ar:2026,datum:"2026-06-15",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666440",docid:666440},
+  {skola:"Regionalt yrkesvux",kommun:"Ystad",region:"Götaland",typ:"Tematisk tillsyn",skolform:"Vuxenutbildning",ar:2026,datum:"2026-06-15",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666439",docid:666439},
+  {skola:"Montessoriskolan Droppen",kommun:"Haparanda",region:"Norrland",typ:"Planerad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-15",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666438",docid:666438},
+  {skola:"Platengymnasiet 1",kommun:"Motala",region:"Götaland",typ:"Riktad tillsyn",skolform:"Gymnasieskola",ar:2026,datum:"2026-06-15",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666436",docid:666436},
+  {skola:"Vara gymnasium",kommun:"Vara",region:"Götaland",typ:"Riktad tillsyn",skolform:"Gymnasieskola",ar:2026,datum:"2026-06-15",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666435",docid:666435},
+  {skola:"Haparanda Montessoriförening",kommun:"Haparanda",region:"Norrland",typ:"Riktad tillsyn",skolform:"Flera",ar:2026,datum:"2026-06-15",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666434",docid:666434},
+  {skola:"Viljaskolan Sollentuna AB",kommun:"Sollentuna",region:"Svealand",typ:"Riktad tillsyn",skolform:"Flera",ar:2026,datum:"2026-06-12",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666433",docid:666433},
+  {skola:"Gökstensskolan F-9",kommun:"Eskilstuna",region:"Svealand",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-12",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666432",docid:666432},
+  {skola:"Listerbyskolan",kommun:"Ronneby",region:"Götaland",typ:"Tematisk granskning",skolform:"Grundskola",ar:2026,datum:"2026-06-12",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666431",docid:666431},
+  {skola:"S:t Botvids gymnasium",kommun:"Botkyrka",region:"Svealand",typ:"Riktad tillsyn",skolform:"Gymnasieskola",ar:2026,datum:"2026-06-12",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666424",docid:666424},
+  {skola:"Tyresö gymnasium",kommun:"Tyresö",region:"Svealand",typ:"Riktad tillsyn",skolform:"Gymnasieskola",ar:2026,datum:"2026-06-12",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666423",docid:666423},
+  {skola:"Sverigefinska skolan Upplands Väsby",kommun:"Upplands Väsby",region:"Svealand",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-12",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666422",docid:666422},
+  {skola:"Viskaforsskolan 7-9",kommun:"Borås",region:"Götaland",typ:"Tematisk granskning",skolform:"Grundskola",ar:2026,datum:"2026-06-12",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666421",docid:666421},
+  {skola:"Magnus Ladulåsskolan",kommun:"Stockholm",region:"Svealand",typ:"Planerad tillsyn",skolform:"Anpassad grundskola",ar:2026,datum:"2026-06-12",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666419",docid:666419},
+  {skola:"Frösåkersskolan",kommun:"Östhammar",region:"Svealand",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-12",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666418",docid:666418},
+  {skola:"Rånnums skola F-3",kommun:"Vänersborg",region:"Götaland",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-12",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666417",docid:666417},
+  {skola:"Djurmoskolan",kommun:"Gagnef",region:"Svealand",typ:"Tematisk granskning",skolform:"Grundskola",ar:2026,datum:"2026-06-12",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666415",docid:666415},
+  {skola:"Värmdö Yrkesgymnasium",kommun:"Värmdö",region:"Svealand",typ:"Planerad tillsyn",skolform:"Gymnasieskola",ar:2026,datum:"2026-06-12",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666416",docid:666416},
+  {skola:"Ludvigsborgsskolan",kommun:"Västervik",region:"Götaland",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-12",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666414",docid:666414},
+  {skola:"Sjölins Gymnasium Malmö",kommun:"Malmö",region:"Götaland",typ:"Tematisk granskning",skolform:"Gymnasieskola",ar:2026,datum:"2026-06-12",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666413",docid:666413},
+  {skola:"Örnsköldsvik (tematisk)",kommun:"Örnsköldsvik",region:"Norrland",typ:"Tematisk granskning",skolform:"Flera",ar:2026,datum:"2026-06-12",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666412",docid:666412},
+  {skola:"Munkhätteskolan anpassad grundskola",kommun:"Malmö",region:"Götaland",typ:"Planerad granskning",skolform:"Anpassad grundskola",ar:2026,datum:"2026-06-12",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666411",docid:666411},
+  {skola:"Drottning Blankas Gymnasieskola Sundsvall",kommun:"Sundsvall",region:"Norrland",typ:"Planerad granskning",skolform:"Gymnasieskola",ar:2026,datum:"2026-06-12",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666410",docid:666410},
+  {skola:"Halmstad gymnasium",kommun:"Halmstad",region:"Götaland",typ:"Riktad tillsyn",skolform:"Gymnasieskola",ar:2026,datum:"2026-06-11",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666408",docid:666408},
+  {skola:"Ronneby gymnasium",kommun:"Ronneby",region:"Götaland",typ:"Riktad tillsyn",skolform:"Gymnasieskola",ar:2026,datum:"2026-06-11",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666409",docid:666409},
+  {skola:"Pilkrogs friskola",kommun:"Kil",region:"Svealand",typ:"Planerad granskning",skolform:"Grundskola",ar:2026,datum:"2026-06-11",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666407",docid:666407},
+  {skola:"Carl Wahren Komvux",kommun:"Norrtälje",region:"Svealand",typ:"Planerad tillsyn",skolform:"Vuxenutbildning",ar:2026,datum:"2026-06-11",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666406",docid:666406},
+  {skola:"Gårdbyskolan",kommun:"Pajala",region:"Norrland",typ:"Planerad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-11",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666405",docid:666405},
+  {skola:"Hannaskolan",kommun:"Umeå",region:"Norrland",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-11",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666404",docid:666404},
+  {skola:"Josefinaskolan",kommun:"Sigtuna",region:"Svealand",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-11",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666402",docid:666402},
+  {skola:"Viktor Rydbergs samskola Djursholm",kommun:"Danderyd",region:"Svealand",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-11",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666401",docid:666401},
+  {skola:"Volvogymnasiet Skövde",kommun:"Skövde",region:"Götaland",typ:"Riktad tillsyn",skolform:"Gymnasieskola",ar:2026,datum:"2026-06-11",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666403",docid:666403},
+  {skola:"Hällby skola F-6",kommun:"Eskilstuna",region:"Svealand",typ:"Planerad granskning",skolform:"Grundskola",ar:2026,datum:"2026-06-11",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666400",docid:666400},
+  {skola:"Fredrikshovs slotts skola",kommun:"Stockholm",region:"Svealand",typ:"Tematisk granskning",skolform:"Grundskola",ar:2026,datum:"2026-06-11",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666399",docid:666399},
+  {skola:"Gymnasieskolan Knut Hahn 3",kommun:"Ronneby",region:"Götaland",typ:"Riktad tillsyn",skolform:"Gymnasieskola",ar:2026,datum:"2026-06-11",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666398",docid:666398},
+  {skola:"Röllingbyskolan",kommun:"Österåker",region:"Svealand",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-11",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666397",docid:666397},
+  {skola:"Espedalsskolan",kommun:"Ronneby",region:"Götaland",typ:"Tematisk granskning",skolform:"Grundskola",ar:2026,datum:"2026-06-11",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666396",docid:666396},
+  {skola:"Lindénska skolan",kommun:"Lerum",region:"Götaland",typ:"Tematisk granskning",skolform:"Grundskola",ar:2026,datum:"2026-06-11",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666395",docid:666395},
+  {skola:"Sverigefinska skolan Stockholm",kommun:"Stockholm",region:"Svealand",typ:"Planerad granskning",skolform:"Grundskola",ar:2026,datum:"2026-06-11",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666394",docid:666394},
+  {skola:"Johan Movingers Gymnasium",kommun:"Stockholm",region:"Svealand",typ:"Riktad tillsyn",skolform:"Gymnasieskola",ar:2026,datum:"2026-06-11",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666393",docid:666393},
+  {skola:"Mariestad gymnasium",kommun:"Mariestad",region:"Götaland",typ:"Riktad tillsyn",skolform:"Gymnasieskola",ar:2026,datum:"2026-06-10",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666392",docid:666392},
+  {skola:"Karlbergsgymnasiet 2",kommun:"Åmål",region:"Götaland",typ:"Riktad tillsyn",skolform:"Gymnasieskola",ar:2026,datum:"2026-06-10",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666391",docid:666391},
+  {skola:"Gula skolan F-6",kommun:"Borås",region:"Götaland",typ:"Planerad granskning",skolform:"Grundskola",ar:2026,datum:"2026-06-10",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666390",docid:666390},
+  {skola:"Europaskolan Rogge",kommun:"Strängnäs",region:"Svealand",typ:"Planerad granskning",skolform:"Grundskola",ar:2026,datum:"2026-06-10",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666389",docid:666389},
+  {skola:"Lingenässkolan M",kommun:"Kristianstad",region:"Götaland",typ:"Planerad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-10",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666388",docid:666388},
+  {skola:"Komvux av Jensen",kommun:"Stockholm",region:"Svealand",typ:"Planerad tillsyn",skolform:"Vuxenutbildning",ar:2026,datum:"2026-06-10",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666387",docid:666387},
+  {skola:"Montessoriskolan Växthuset",kommun:"Järfälla",region:"Svealand",typ:"Planerad granskning",skolform:"Grundskola",ar:2026,datum:"2026-06-10",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666386",docid:666386},
+  {skola:"Kunskapskällan",kommun:"Herrljunga",region:"Götaland",typ:"Riktad tillsyn",skolform:"Gymnasieskola",ar:2026,datum:"2026-06-10",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666384",docid:666384},
+  {skola:"Broholm Education AB",kommun:"Stockholm",region:"Svealand",typ:"Tematisk tillsyn",skolform:"Flera",ar:2026,datum:"2026-06-10",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666383",docid:666383},
+  {skola:"Särö Montessoriskola Daggdroppen",kommun:"Kungsbacka",region:"Götaland",typ:"Tematisk tillsyn",skolform:"Flera",ar:2026,datum:"2026-06-10",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666382",docid:666382},
+  {skola:"Vebomarks Byaskola",kommun:"Skellefteå",region:"Norrland",typ:"Riktad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-09",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666381",docid:666381},
+  {skola:"Hillelskolan",kommun:"Stockholm",region:"Svealand",typ:"Riktad tillsyn",skolform:"Fritidshem",ar:2026,datum:"2026-06-09",drift:"Friskola",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666380",docid:666380},
+  {skola:"Astrid Lindgrens skola 7-9",kommun:"Vimmerby",region:"Götaland",typ:"Planerad tillsyn",skolform:"Grundskola",ar:2026,datum:"2026-06-09",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666379",docid:666379},
+  {skola:"Ängslättskolan",kommun:"Malmö",region:"Götaland",typ:"Planerad granskning",skolform:"Grundskola",ar:2026,datum:"2026-06-09",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666377",docid:666377},
+  {skola:"Älmhults gymnasium",kommun:"Älmhult",region:"Götaland",typ:"Riktad tillsyn",skolform:"Gymnasieskola",ar:2026,datum:"2026-06-09",drift:"Kommunal",url:"http://siris.skolverket.se/siris/ris.openfile?docID=666378",docid:666378}
+];
+
+const MONTHS_SV = ['Jan','Feb','Mar','Apr','Maj','Jun','Jul','Aug','Sep','Okt','Nov','Dec'];
+const BRC = {Norrland:'bn',Svealand:'bs2','Götaland':'bg'};
+const RBTNAC = {Norrland:'#185FA5',Svealand:'#534AB7','Götaland':'#0F6E56'};
+const RBTNAL = {Norrland:'#E6F1FB',Svealand:'#EEEDFE','Götaland':'#E1F5EE'};
+const BANDS = [{name:'Norrland',col:'#378ADD',latN:69.5,latS:62.2},{name:'Svealand',col:'#7F77DD',latN:62.2,latS:59.0},{name:'Götaland',col:'#1D9E75',latN:59.0,latS:55.0}];
+const YEAR_COLS = {2026:'#004b62', 2025:'#00697f', 2024:'#00849c'};
+
+let DATA = [...SEEDED];
+let activeRegions=new Set(),activeTypes=new Set(),activeSkolform=new Set(),activeDrift=new Set(),activeMonths=new Set();
+let sortCol='datum',sortDir=-1;
+let rChart=null,dChart=null,mapReady=false;
+let activeYears=new Set([2026]), yearDataLoaded={2026:true,2025:false,2024:false};
+
+// ── Map ─────────────────────────────────────────────────────────────────────
+const W=176,H=400;
+const proj=d3.geoMercator().center([17.5,63]).scale(760).translate([W/2,H/2]);
+const pathGen=d3.geoPath(proj);
+const svg=d3.select('#mapSvg');
+
+d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json').then(world=>{
+  const sweden=topojson.feature(world,world.objects.countries).features.find(f=>+f.id===752);
+  if(!sweden) return;
+  svg.append('defs').append('clipPath').attr('id','sweClip').append('path').datum(sweden).attr('d',pathGen);
+  BANDS.forEach(b=>{
+    const yTop=Math.max(0,proj([0,b.latN])[1]),yBot=Math.min(H,proj([0,b.latS])[1]);
+    svg.append('rect').attr('class','map-region').attr('data-region',b.name)
+      .attr('x',0).attr('y',yTop).attr('width',W).attr('height',yBot-yTop)
+      .attr('fill',b.col).attr('clip-path','url(#sweClip)').on('click',()=>toggleRegion(b.name));
+  });
+  svg.append('path').datum(sweden).attr('d',pathGen).attr('fill','none').attr('stroke','white').attr('stroke-width',1);
+  BANDS.forEach(b=>{
+    const yTop=proj([0,b.latN])[1],yBot=proj([0,b.latS])[1],yMid=(yTop+yBot)/2,cx=W/2-4;
+    const g=svg.append('g').attr('pointer-events','none');
+    g.append('rect').attr('x',cx-34).attr('y',yMid-20).attr('width',68).attr('height',30).attr('rx',5).attr('fill','rgba(0,0,0,0.38)');
+    g.append('text').attr('x',cx).attr('y',yMid-6).attr('text-anchor','middle').attr('fill','white').attr('font-size',12).attr('font-weight','500').text(b.name);
+    g.append('text').attr('class','mc-'+b.name.replace(/[öä]/g,c=>c==='ö'?'o':'a')).attr('x',cx).attr('y',yMid+8).attr('text-anchor','middle').attr('fill','rgba(255,255,255,0.85)').attr('font-size',10).text('—');
+  });
+  mapReady=true; applyFilters();
+});
+
+function updateMap(f){
+  if(!mapReady) return;
+  const c={Norrland:0,Svealand:0,'Götaland':0};
+  f.forEach(b=>{if(c[b.region]!==undefined) c[b.region]++;});
+  BANDS.forEach(b=>svg.selectAll('.mc-'+b.name.replace(/[öä]/g,c=>c==='ö'?'o':'a')).text(c[b.name]+' beslut'));
+  svg.selectAll('.map-region').each(function(){
+    const r=d3.select(this).attr('data-region');
+    d3.select(this).attr('opacity',activeRegions.size>0&&!activeRegions.has(r)?0.25:1);
+  });
+}
+
+// ── Year toggle & data loading ─────────────────────────────────────────────
+async function toggleYear(yr){
+  if(activeYears.has(yr)){
+    if(activeYears.size===1) return; // keep at least one year active
+    activeYears.delete(yr);
+  } else {
+    activeYears.add(yr);
+    if(!yearDataLoaded[yr]) await loadYearFromProxy(yr);
+  }
+  // Update tab styles
+  [2024,2025,2026].forEach(y=>{
+    document.getElementById('yt'+y)?.classList.toggle('active', activeYears.has(y));
+  });
+  // Clear month filter when switching years (no month data for historical)
+  if(activeYears.size>1) activeMonths.clear();
+  applyFilters();
+}
+
+async function loadYearFromProxy(yr){
+  const msg=document.getElementById('loadingMsg');
+  const tab=document.getElementById('yt'+yr);
+  msg.style.display='';
+  tab?.classList.add('loading');
+
+  try {
+    const res = await fetch(`proxy.php?action=decisions&ar=${yr}`);
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const apiData = await res.json();
+    if(!Array.isArray(apiData)) throw new Error('Bad response');
+
+    const seededDocIds = new Set(SEEDED.filter(d=>d.ar===yr).map(d=>d.docid));
+    const merged = [
+      ...SEEDED.filter(d=>d.ar===yr),
+      ...apiData.filter(d=>!seededDocIds.has(d.docid))
+    ];
+    DATA = [...DATA.filter(d=>d.ar!==yr), ...merged];
+    yearDataLoaded[yr]=true;
+  } catch(e){
+    console.error('Proxy fetch failed for '+yr+':', e);
+    yearDataLoaded[yr]=true; // mark as attempted so we don't loop
+  }
+
+  msg.style.display='none';
+  tab?.classList.remove('loading');
+}
+
+// ── Month filter ───────────────────────────────────────────────────────────
+function buildMonthFilter(activeData){
+  const monthBar = document.getElementById('monthBar');
+  const monthTags = document.getElementById('monthTags');
+  const note = document.getElementById('monthNote');
+
+  // Month filter only makes sense for single year with dated entries
+  if(activeYears.size > 1){ monthBar.style.display='none'; return; }
+
+  const withDates = activeData.filter(d=>d.datum);
+  if(!withDates.length){ monthBar.style.display='none'; return; }
+
+  const months = [...new Set(withDates.map(d=>parseInt(d.datum.split('-')[1])))].sort((a,b)=>a-b);
+  monthBar.style.display='';
+  monthTags.innerHTML = months.map(m=>
+    `<span class="tag ${activeMonths.has(m)?'act':''}" onclick="toggleMonth(${m})">${MONTHS_SV[m-1]}</span>`
+  ).join('');
+
+  const withoutDates = activeData.filter(d=>!d.datum).length;
+  note.style.display = withoutDates > 0 ? '' : 'none';
+  if(withoutDates > 0) note.textContent = `${withoutDates} beslut utan exakt datum visas ej vid månadsfiltrering`;
+}
+
+function toggleMonth(m){
+  if(activeMonths.has(m)) activeMonths.delete(m); else activeMonths.add(m);
+  applyFilters();
+}
+
+// ── Sort ───────────────────────────────────────────────────────────────────
+function setSort(col){
+  if(sortCol===col) sortDir*=-1; else{sortCol=col;sortDir=1;}
+  document.querySelectorAll('.si').forEach(el=>{el.classList.remove('on','ti-sort-ascending','ti-sort-descending');el.classList.add('ti-arrows-sort');});
+  document.querySelectorAll('.th-cell').forEach(el=>el.classList.remove('act'));
+  const icon=document.getElementById('si-'+col);
+  if(icon){icon.classList.remove('ti-arrows-sort');icon.classList.add('on',sortDir===1?'ti-sort-ascending':'ti-sort-descending');}
+  document.querySelector(`[onclick="setSort('${col}')"]`)?.classList.add('act');
+  renderTable(getFiltered());
+}
+
+// ── Filter helpers ─────────────────────────────────────────────────────────
+function getActiveData(){
+  return DATA.filter(d=>activeYears.has(d.ar));
+}
+
+function getFiltered(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  const onlyKnown=document.getElementById('onlyKnownTyp')?.checked;
+  return getActiveData().filter(b=>{
+    if(onlyKnown && !b.typ) return false;
+    if(activeRegions.size&&!activeRegions.has(b.region)) return false;
+    if(activeTypes.size&&!activeTypes.has(b.typ)) return false;
+    if(activeSkolform.size&&!activeSkolform.has(b.skolform)) return false;
+    if(activeDrift.size&&(b.drift==null||!activeDrift.has(b.drift))) return false;
+    if(activeMonths.size){
+      if(!b.datum) return false;
+      const m=parseInt(b.datum.split('-')[1]);
+      if(!activeMonths.has(m)) return false;
+    }
+    if(q&&!b.skola.toLowerCase().includes(q)&&!b.kommun.toLowerCase().includes(q)) return false;
+    return true;
+  });
+}
+
+function toggleRegion(r){if(activeRegions.has(r)) activeRegions.delete(r); else activeRegions.add(r);applyFilters();}
+function toggleFilter(set,val){if(set.has(val)) set.delete(val); else set.add(val);applyFilters();}
+function clearFilters(){
+  activeRegions.clear();activeTypes.clear();activeSkolform.clear();activeDrift.clear();activeMonths.clear();
+  document.getElementById('searchInput').value='';
+  const cb=document.getElementById('onlyKnownTyp'); if(cb) cb.checked=false;
+  applyFilters();
+}
+
+// ── Render ─────────────────────────────────────────────────────────────────
+function renderTags(activeData){
+  const typs=[...new Set(activeData.map(b=>b.typ).filter(Boolean))].sort();
+  const forms=[...new Set(activeData.map(b=>b.skolform).filter(d=>d&&d!=='Okänd'))].sort();
+
+  document.getElementById('typeTags').innerHTML=typs.map(t=>
+    `<span class="tag ${activeTypes.has(t)?'act':''}" onclick="toggleFilter(activeTypes,'${t}')">${t}</span>`
+  ).join('');
+
+  document.getElementById('skolformTags').innerHTML=forms.map(f=>
+    `<span class="tag ${activeSkolform.has(f)?'act':''}" onclick="toggleFilter(activeSkolform,'${f}')">${f}</span>`
+  ).join('');
+
+  document.getElementById('driftTags').innerHTML=
+    `<span class="tag ak ${activeDrift.has('Kommunal')?'act':''}" onclick="toggleFilter(activeDrift,'Kommunal')"><span style="width:7px;height:7px;border-radius:50%;background:#3B6D11;display:inline-block;margin-right:3px;"></span>Kommunal</span>
+     <span class="tag af ${activeDrift.has('Friskola')?'act':''}" onclick="toggleFilter(activeDrift,'Friskola')"><span style="width:7px;height:7px;border-radius:50%;background:#854F0B;display:inline-block;margin-right:3px;"></span>Friskola</span>`;
+
+  // Show "only known type" toggle if there are entries without type
+  const hasUnknown = activeData.some(b=>!b.typ);
+  document.getElementById('knownTypRow').style.display = hasUnknown ? '' : 'none';
+}
+
+function renderMetrics(f){
+  const c={Norrland:0,Svealand:0,'Götaland':0};
+  f.forEach(b=>{if(c[b.region]!==undefined) c[b.region]++;});
+  const fri=f.filter(b=>b.drift==='Friskola').length;
+  const hasDrift=f.filter(b=>b.drift!=null).length;
+  document.getElementById('mTot').textContent=f.length;
+  document.getElementById('mNorr').textContent=c.Norrland;
+  document.getElementById('mSvea').textContent=c.Svealand;
+  document.getElementById('mGota').textContent=c['Götaland'];
+  document.getElementById('mFri').textContent=hasDrift?Math.round(fri/hasDrift*100)+'%':'—';
+  const btnIds={Norrland:'btnNorrland',Svealand:'btnSvealand','Götaland':'btnGotaland'};
+  const txtIds={Norrland:'btnNorrTxt',Svealand:'btnSveaTxt','Götaland':'btnGotaTxt'};
+  BANDS.forEach(b=>{
+    const btn=document.getElementById(btnIds[b.name]);
+    const txt=document.getElementById(txtIds[b.name]);
+    if(txt) txt.textContent=c[b.name];
+    if(btn){
+      if(activeRegions.has(b.name)){btn.style.borderColor=RBTNAC[b.name];btn.style.borderWidth='2px';btn.style.background=RBTNAL[b.name];}
+      else{btn.style.borderColor='';btn.style.borderWidth='';btn.style.background='';}
+    }
+  });
+}
+
+function renderCharts(f){
+  const regions=['Norrland','Svealand','Götaland'];
+  const years=[...activeYears].sort();
+  if(rChart) rChart.destroy();
+
+  if(years.length > 1){
+    // Multi-year: grouped bars per region, one dataset per year
+    rChart=new Chart(document.getElementById('regionChart'),{type:'bar',data:{
+      labels:regions,
+      datasets:years.map(yr=>({
+        label:''+yr,
+        data:regions.map(r=>f.filter(b=>b.ar===yr&&b.region===r).length),
+        backgroundColor:YEAR_COLS[yr]||'#555',
+        borderRadius:3,borderSkipped:false
+      }))
+    },options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,position:'top',labels:{font:{size:11},boxWidth:10}}},
+      scales:{x:{grid:{display:false},ticks:{font:{size:11}}},y:{grid:{color:'rgba(128,128,128,0.1)'},ticks:{stepSize:10,font:{size:11}}}}}});
+  } else {
+    // Single year: stacked kommunal/friskola per region
+    const kom={},fri={};
+    regions.forEach(r=>{kom[r]=0;fri[r]=0;});
+    f.forEach(b=>{if(kom[b.region]!==undefined){if(b.drift==='Kommunal') kom[b.region]++; else if(b.drift==='Friskola') fri[b.region]++;}});
+    rChart=new Chart(document.getElementById('regionChart'),{type:'bar',data:{labels:regions,datasets:[
+      {label:'Kommunal',data:regions.map(r=>kom[r]),backgroundColor:'#639922',borderRadius:3,borderSkipped:false},
+      {label:'Friskola',data:regions.map(r=>fri[r]),backgroundColor:'#EF9F27',borderRadius:3,borderSkipped:false},
+      {label:'Okänd',data:regions.map(r=>f.filter(b=>b.region===r&&b.drift==null).length),backgroundColor:'#aaaaaa',borderRadius:3,borderSkipped:false}
+    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:11}}},y:{stacked:true,grid:{color:'rgba(128,128,128,0.1)'},ticks:{stepSize:10,font:{size:11}}}}}});
+  }
+
+  const totK=f.filter(b=>b.drift==='Kommunal').length,totF=f.filter(b=>b.drift==='Friskola').length;
+  if(dChart) dChart.destroy();
+  dChart=new Chart(document.getElementById('driftChart'),{type:'doughnut',data:{labels:['Kommunal','Friskola'],datasets:[{data:[totK,totF],backgroundColor:['#639922','#EF9F27'],borderWidth:0,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+  document.getElementById('driftLegend').innerHTML=`<span class="li"><span class="lsq" style="background:#639922"></span>Kommunal (${totK})</span><span class="li"><span class="lsq" style="background:#EF9F27"></span>Friskola (${totF})</span>`;
+}
+
+function renderTable(f){
+  const multiYear = activeYears.size > 1;
+  const sorted=[...f].sort((a,b)=>{
+    let av=a[sortCol]??'', bv=b[sortCol]??'';
+    if(sortCol==='datum'){av=a.datum||(''+a.ar+'00');bv=b.datum||(''+b.ar+'00');}
+    return av<bv?-sortDir:av>bv?sortDir:0;
+  });
+
+  // Update table header columns
+  const thEl=document.querySelector('.th');
+  const trTemplate='.tr';
+  if(multiYear){
+    thEl.style.gridTemplateColumns='1fr 60px 100px 130px 90px 65px';
+    document.querySelectorAll('.th-cell-ar').forEach(e=>e.style.display='');
+  } else {
+    thEl.style.gridTemplateColumns='1fr 100px 130px 90px 65px';
+    document.querySelectorAll('.th-cell-ar').forEach(e=>e.style.display='none');
+  }
+
+  const body=document.getElementById('tableBody');
+  const shown=sorted.slice(0,100);
+  if(!shown.length){body.innerHTML='<div class="empty">Inga beslut matchar filtren</div>';return;}
+  body.innerHTML=shown.map(b=>`
+    <div class="tr" style="grid-template-columns:${multiYear?'1fr 60px 100px 130px 90px 65px':'1fr 100px 130px 90px 65px'}">
+      <span><div style="font-size:12px">${b.skola}</div><div class="mu">${b.kommun}</div></span>
+      ${multiYear?`<span><span class="badge" style="background:${YEAR_COLS[b.ar]||'#555'};color:#fff;font-size:10px">${b.ar}</span></span>`:''}
+      <span class="mu">${b.datum||b.ar}</span>
+      <span><span class="badge bt2" style="font-size:10px">${b.typ||'—'}</span><div class="mu">${b.skolform||''}</div></span>
+      <span>${b.region&&b.region!=='Okänd'?`<span class="badge ${BRC[b.region]||'bt2'}">${b.region}</span>`:''}</span>
+      <span style="display:flex;flex-direction:column;gap:3px">
+        ${b.drift?`<span class="badge ${b.drift==='Kommunal'?'bk':'bf'}">${b.drift}</span>`:''}
+        <a href="${b.url}" class="badge bl" target="_blank" rel="noopener"><i class="ti ti-external-link" style="font-size:9px"></i> Beslut</a>
+      </span>
+    </div>`).join('');
+  if(f.length>100) body.innerHTML+=`<div class="empty" style="padding:.5rem;font-size:11px">Visar 100 av ${f.length}</div>`;
+}
+
+function applyFilters(){
+  const activeData = getActiveData();
+  renderTags(activeData);
+  buildMonthFilter(activeData);
+  const f=getFiltered();
+  renderMetrics(f);
+  updateMap(f);
+  renderCharts(f);
+  renderTable(f);
+}
+
+applyFilters();
+</script>
+<style>@keyframes spin{to{transform:rotate(360deg);}}</style>
+</body>
+</html>
