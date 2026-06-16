@@ -133,6 +133,18 @@ function parse_doc($text, $municipality) {
     return ['typ' => $typ, 'skolform' => $skolform ?: 'Okänd', 'skola' => $skola];
 }
 
+// ── Approximate date from docID ──────────────────────────────────────────
+// Anchor: docID 666489 = 2026-06-16. Rate ≈ 16 docIDs/day across all SIRIS docs.
+function approx_datum($docid) {
+    $anchor_id   = 666489;
+    $anchor_date = mktime(0, 0, 0, 6, 16, 2026);
+    $rate        = 16.0; // docIDs per day
+    $days_offset = ($docid - $anchor_id) / $rate;
+    $ts = $anchor_date + (int)($days_offset * 86400);
+    // Return YYYY-MM-01 (day set to 1 since it's an estimate)
+    return date('Y-m', $ts) . '-01';
+}
+
 // ── Region from county code ───────────────────────────────────────────────
 
 function landsdel($kod) {
@@ -162,7 +174,7 @@ if ($action === 'decisions' && $ar) {
         array_map('intval', preg_split('/[,\s]+/', $ar)),
         fn($y) => $y >= 2020 && $y <= 2030
     );
-    $cache_key = 'decisions_' . implode('_', $years);
+    $cache_key = 'decisions_v2_' . implode('_', $years);
 
     $cached = cache_read($cache_key, 21600);
     if ($cached && !isset($_GET['force'])) { echo json_encode($cached); exit; }
@@ -212,7 +224,8 @@ if ($action === 'decisions' && $ar) {
                 'typ'     => $parsed['typ'],
                 'skolform'=> $parsed['skolform'],
                 'ar'      => $yr,
-                'datum'   => null,
+                'datum'   => approx_datum($docid), // approximate; day is always 01
+                'datum_approx' => true,
                 'drift'   => null,
                 'url'     => $doc['url'],
                 'docid'   => $docid,

@@ -425,9 +425,9 @@ function buildMonthFilter(activeData){
     `<span class="tag ${activeMonths.has(m)?'act':''}" onclick="toggleMonth(${m})">${MONTHS_SV[m-1]}</span>`
   ).join('');
 
-  const withoutDates = activeData.filter(d=>!d.datum).length;
-  note.style.display = withoutDates > 0 ? '' : 'none';
-  if(withoutDates > 0) note.textContent = `${withoutDates} beslut saknar exakt datum och visas ej vid månadsfiltrering`;
+  const approxCount = activeData.filter(d=>d.datum_approx).length;
+  note.style.display = approxCount > 0 ? '' : 'none';
+  if(approxCount > 0) note.textContent = `${approxCount} beslut har uppskattat månad (API ger ej exakt datum) – visas som ~Månad`;
 }
 
 function toggleMonth(m){
@@ -581,7 +581,7 @@ function renderTable(f){
     <div class="tr" style="grid-template-columns:${multiYear?'1fr 60px 100px 130px 90px 65px':'1fr 100px 130px 90px 65px'}">
       <span><div style="font-size:12px">${b.skola}</div><div class="mu">${b.kommun}</div></span>
       ${multiYear?`<span><span class="badge" style="background:${YEAR_COLS[b.ar]||'#555'};color:#fff;font-size:10px">${b.ar}</span></span>`:''}
-      <span class="mu">${b.datum||b.ar}</span>
+      <span class="mu">${b.datum ? (b.datum_approx ? '~'+MONTHS_SV[parseInt(b.datum.split('-')[1])-1]+' '+b.ar : b.datum) : b.ar}</span>
       <span><span class="badge bt2" style="font-size:10px">${b.typ||'—'}</span><div class="mu">${b.skolform||''}</div></span>
       <span>${b.region&&b.region!=='Okänd'?`<span class="badge ${BRC[b.region]||'bt2'}">${b.region}</span>`:''}</span>
       <span style="display:flex;flex-direction:column;gap:3px">
