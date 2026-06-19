@@ -217,30 +217,32 @@ if ($action === 'decisions' && $ar) {
         fn($y) => $y >= 2020 && $y <= 2030
     ));
     sort($years);
-    $cache_key = 'decisions_v3_' . implode('_', $years);
+    $cache_key = 'decisions_v4_' . implode('_', $years);
 
     $cached = cache_read($cache_key, 21600);
     if ($cached && !isset($_GET['force'])) { echo json_encode($cached); exit; }
 
     $name_to_kod = get_muni_map();
 
-    // Fetch from doksok_api endpoints (single requests, much faster than 291 county calls)
     $SIRIS = 'https://siris.skolverket.se';
-    $endpoints = [
+
+    // Endpoints that return all municipalities in one request
+    $global_endpoints = [
         "$SIRIS/siris/reports/doksok_api/dokument_rit/?pSkolform=&pKommun=&pHman=&pSkolkod=",
         "$SIRIS/siris/reports/doksok_api/dokument_kg/?pSkolform=&pKommun=&pHman=&pSkolkod=",
+    ];
+
+    // Endpoints that require pKommun (parallel fetch per municipality)
+    $muni_endpoint_templates = [
+        "$SIRIS/siris/reports/doksok_api/dokument_plt/?pSkolform=&pKommun={KOD}&pHman=&pSkolkod=",
     ];
 
     $all  = [];
     $seen = [];
 
-    foreach ($endpoints as $url) {
-        $body = fetch_url($url);
-        if (!$body) continue;
-        $data = json_decode($body, true);
-        if (!$data || !isset($data['dokument'])) continue;
-
-        foreach ($data['dokument'] as $doc) {
+    // Helper to process a list of documents
+    $process = function($docs) use (&$all, &$seen, $years, $name_to_kod) {
+        foreach ($docs as $doc) {
             if (!preg_match('/docID=(\d+)/', $doc['link'] ?? '', $m)) continue;
             $docid = intval($m[1]);
             if (isset($seen[$docid])) continue;
@@ -251,19 +253,40 @@ if ($action === 'decisions' && $ar) {
 
             $seen[$docid] = true;
             $all[] = [
-                'skola'   => $parsed['skola'],
-                'kommun'  => $parsed['kommun'],
-                'kod'     => $parsed['kod'],
-                'region'  => $parsed['region'],
-                'typ'     => $parsed['typ'],
-                'skolform'=> $parsed['skolform'],
-                'ar'      => $parsed['ar'],
-                'datum'   => approx_datum($docid),
+                'skola'        => $parsed['skola'],
+                'kommun'       => $parsed['kommun'],
+                'kod'          => $parsed['kod'],
+                'region'       => $parsed['region'],
+                'typ'          => $parsed['typ'],
+                'skolform'     => $parsed['skolform'],
+                'ar'           => $parsed['ar'],
+                'datum'        => approx_datum($docid),
                 'datum_approx' => true,
-                'drift'   => null,
-                'url'     => 'http:'.$doc['link'],
-                'docid'   => $docid,
+                'drift'        => null,
+                'url'          => 'http:'.$doc['link'],
+                'docid'        => $docid,
             ];
+        }
+    };
+
+    // Fetch global endpoints
+    foreach ($global_endpoints as $url) {
+        $body = fetch_url($url);
+        $data = $body ? json_decode($body, true) : null;
+        if ($data && isset($data['dokument'])) $process($data['dokument']);
+    }
+
+    // Fetch municipality-specific endpoints in parallel
+    $muni_kodes = array_values($name_to_kod);
+    foreach ($muni_endpoint_templates as $tpl) {
+        $url_map = [];
+        foreach ($muni_kodes as $kod) {
+            $url_map[$kod] = str_replace('{KOD}', $kod, $tpl);
+        }
+        $raw_results = fetch_parallel($url_map, 30);
+        foreach ($raw_results as $body) {
+            $data = $body ? json_decode($body, true) : null;
+            if ($data && isset($data['dokument'])) $process($data['dokument']);
         }
     }
 
